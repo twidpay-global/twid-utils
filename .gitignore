@@ -1,0 +1,9 @@
+storage
+vendor
+coverage
+*DS_Store
+.phpunit.result.cache
+
+# IDE specific
+/.idea
+/.vscode
