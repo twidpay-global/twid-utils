@@ -1,6 +1,6 @@
 <?php
 
-namespace KafkHelper;
+namespace Utils\queue;
 
 use RdKafka\Conf;
 use RdKafka\Message;

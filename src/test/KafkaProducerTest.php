@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use KafkHelper\KafkaProducer;
+use Utils\queue\KafkaProducer;
 
 class KafkaProducerTest extends TestCase
 {

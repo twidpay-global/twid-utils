@@ -4,7 +4,7 @@ This PHP library provides a convenient way to produce messages to Kafka topics u
 ## Installation
 
 1. **Requirements**:
-    - RdKafka PHP extension ([Installation Instructions](https://github.com/arnaud-lb/php-rdkafka#installation))
+    - RdKafka PHP extension ([Installation Instructions](https://arnaud.le-blanc.net/php-rdkafka-doc/phpdoc/rdkafka.installation.html))
 
 2. **Installation via Composer**:
 
@@ -14,8 +14,11 @@ This PHP library provides a convenient way to produce messages to Kafka topics u
    composer require twidpay/utils
    ```
 3. **Usage**:
-    
+   - All possible configurations for the KafkaProducer can be found [here](https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md)    
+
     ```php
+   use Utils\queue\KafkaProducer;
+ 
     $config = [
         'metadata.broker.list' => 'localhost:9092',
         'compression.codec' => 'snappy',
