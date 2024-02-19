@@ -1,0 +1,8 @@
+<!-- phpunit.xml -->
+<phpunit>
+    <testsuites>
+        <testsuite name="Tests">
+            <directory>src/test</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
