@@ -56,7 +56,11 @@ class KafkaProducer
         $topic = $this->producer->newTopic($topic, null);
         $partition = \RD_KAFKA_PARTITION_UA;
 
-        $key !== null ? $topic->producev($partition, \RD_KAFKA_MSG_F_BLOCK, $message, $key) : $topic->produce($partition, \RD_KAFKA_MSG_F_BLOCK, $message);
+        if ($key === null) {
+            $key = \Ramsey\Uuid\Uuid::uuid4()->toString();
+        }
+
+        $topic->producev($partition, \RD_KAFKA_MSG_F_BLOCK, $message, $key);
         $this->producer->flush(-1);
     }
 }
