@@ -2,7 +2,7 @@
     "name": "twidpay/utils",
     "type": "library",
     "description": "Utils for twidpay",
-    "version": "0.1.0",
+    "version": "1.0.2",
     "license": "MIT",
     "authors": [
         {
