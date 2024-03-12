@@ -43,8 +43,6 @@ class KafkaProducer
             if (\RD_KAFKA_RESP_ERR_NO_ERROR !== $message->err) {
                 $errorStr = \rd_kafka_err2str($message->err);
                 printf('Message FAILED (%s, %s) to send with payload => %s', $message->err, $errorStr, $message->payload) . PHP_EOL;
-            } else {
-                printf('Message sent SUCCESSFULLY with payload => %s', $message->payload) . PHP_EOL;
             }
         });
 
