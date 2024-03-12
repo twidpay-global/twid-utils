@@ -61,6 +61,14 @@ class KafkaProducer
         }
 
         $topic->producev($partition, \RD_KAFKA_MSG_F_BLOCK, $message, $key);
-        $this->producer->flush(-1);
+
+        // Flush with timeout and retries
+        for ($flushRetries = 0; $flushRetries < 3; $flushRetries++) {
+            $result = $this->producer->flush(5000);
+            if ($result === RD_KAFKA_RESP_ERR_NO_ERROR) {
+                break;
+            }
+        }
+
     }
 }
