@@ -21,6 +21,7 @@
         "php-mock/php-mock": "^2.2"
     },
     "require": {
-        "ramsey/uuid": "^4.2.2"
+        "ramsey/uuid": "^4.2.2",
+        "twidpay/twid-logger": "^1.0"
     }
 }

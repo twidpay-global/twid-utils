@@ -5,6 +5,7 @@ namespace Utils\queue;
 use RdKafka\Conf;
 use RdKafka\Message;
 use RdKafka\Producer;
+use twid\logger\Facades\TLog;
 
 class KafkaProducer
 {
@@ -42,7 +43,7 @@ class KafkaProducer
         $this->conf->setDrMsgCb(function (Producer $kafka, Message $message) {
             if (\RD_KAFKA_RESP_ERR_NO_ERROR !== $message->err) {
                 $errorStr = \rd_kafka_err2str($message->err);
-                printf('Message FAILED (%s, %s) to send with payload => %s', $message->err, $errorStr, $message->payload) . PHP_EOL;
+                TLog::error('Message sent FAILED with payload => ' . $message->payload . ' and error => ' . $errorStr);
             }
         });
 
