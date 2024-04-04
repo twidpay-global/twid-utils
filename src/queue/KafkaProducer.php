@@ -9,10 +9,20 @@ use twid\logger\Facades\TLog;
 
 class KafkaProducer
 {
+    private static $instance = null;
     private $producer;
     private $conf;
 
-    public function __construct(array $config = [])
+    public static function getInstance(array $config = [], Producer $producer = null)
+    {
+        if (self::$instance === null) {
+            self::$instance = new self($config, $producer);
+        }
+
+        return self::$instance;
+    }
+
+    private function __construct(array $config = [], Producer $producer = null)
     {
         $this->conf = new Conf();
 
@@ -20,7 +30,7 @@ class KafkaProducer
 
         $this->mergeConfig($config);
 
-        $this->initializeProducer();
+        $this->producer = $producer ?? $this->initializeProducer();
     }
 
     private function setDefaultConfig()
@@ -40,10 +50,11 @@ class KafkaProducer
 
     private function initializeProducer()
     {
+        TLog::info('Initializing Kafka Producer');
         $this->conf->setDrMsgCb(function (Producer $kafka, Message $message) {
             if (\RD_KAFKA_RESP_ERR_NO_ERROR !== $message->err) {
                 $errorStr = \rd_kafka_err2str($message->err);
-                TLog::error('Message sent FAILED with payload => ' . $message->payload . ' and error => ' . $errorStr);
+                TLog::info('Message sent FAILED with payload => ' . $message->payload . ' and error => ' . $errorStr);
             }
         });
 
@@ -68,6 +79,5 @@ class KafkaProducer
                 break;
             }
         }
-
     }
 }
