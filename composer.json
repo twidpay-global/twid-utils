@@ -2,7 +2,7 @@
     "name": "twidpay/utils",
     "type": "library",
     "description": "Utils for twidpay",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "license": "MIT",
     "authors": [
         {
@@ -21,6 +21,7 @@
         "php-mock/php-mock": "^2.2"
     },
     "require": {
-        "ramsey/uuid": "^4.2.2"
+        "ramsey/uuid": "^4.2.2",
+        "twidpay/twid-logger": "^1.0"
     }
 }
