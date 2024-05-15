@@ -1,7 +1,7 @@
 <?php 
 
 use PHPUnit\Framework\TestCase;
-use Utils\PiiData\CustomerPIIDataDTO;
+use Utils\PiiData\CustomerDataDTO;
 
 class CustomerPIIDataDTOTest extends TestCase
 {
@@ -18,7 +18,7 @@ class CustomerPIIDataDTOTest extends TestCase
             'hashedMobileNumber' => 'hash123'
         ];
 
-        $dto = new CustomerPIIDataDTO($data);
+        $dto = new CustomerDataDTO($data);
 
         $this->assertEquals($data['id'], $dto->getId());
         $this->assertEquals($data['mobileNumber'], $dto->getMobileNumber());
