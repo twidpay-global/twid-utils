@@ -2,7 +2,7 @@
 
 namespace Utils\PiiData;
 
-class CustomerPIIDataDTO
+class CustomerDataDTO
 {
     private int $id;
 
