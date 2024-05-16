@@ -28,16 +28,8 @@ class CustomerDataDTO
 
         // Check if all provided keys are valid properties
         foreach ($fields as $key => $value) {
-            if (!in_array($key, $properties, true)) {
-                throw new InvalidArgumentException('Invalid field provided: ' . $key);
-            }
-            $this->$key = $value;
-        }
-
-        // Check if all required properties are set
-        foreach ($properties as $property) {
-            if (!isset($this->$property)) {
-                throw new InvalidArgumentException('Missing required field: ' . $property);
+            if (in_array($key, $properties, true)) {
+                $this->$key = $value;
             }
         }
     }
