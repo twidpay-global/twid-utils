@@ -77,7 +77,7 @@ class CustomerHelper
     {
         try {
             if (empty($fields)) {
-                $fields = ['id', 'mobileNumber'];
+                $fields = ['entity_id', 'orig_mobile'];
             }
 
             $results = DB::connection(PII_DATABASE_CONNECTION)
@@ -91,7 +91,15 @@ class CustomerHelper
                 foreach ($results as $result) {
                     $data = [];
                     foreach ($fields as $field) {
-                        $data[$field] = $result->{$field};
+                        if (isset($result->{$field})) {
+                            if ($field === 'entity_id') {
+                                $data['id'] = $result->{$field};
+                            } elseif ($field === 'orig_mobile') {
+                                $data['mobileNumber'] = $result->{$field};
+                            } else {
+                                $data[$field] = $result->{$field};
+                            }
+                        }
                     }
                     $customerDataArray[] = new CustomerDataDTO($data);
                 }
