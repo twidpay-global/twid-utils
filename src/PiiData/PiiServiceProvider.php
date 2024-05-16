@@ -38,5 +38,6 @@ class PiiServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([__DIR__ . '/CustomerHelper.php' => dirname(__DIR__, 5) . '/utils/CustomerHelper.php'], 'utils');
+        $this->publishes([__DIR__ . '/CustomerDataDTO.php' => dirname(__DIR__, 5) . '/utils/CustomerDataDTO.php'], 'utils');
     }
 }
