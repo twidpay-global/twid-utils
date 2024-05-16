@@ -8,11 +8,11 @@ class CustomerDataDTO
 
     private string $mobileNumber;
 
-    private string $firstName;
+    private string $firstname;
 
-    private string $middleName;
+    private string $middlename;
 
-    private string $lastName;
+    private string $lastname;
 
     private string $email;
 
@@ -20,13 +20,9 @@ class CustomerDataDTO
 
     private string $hashedMobileNumber;
 
-    // Constructor to initialize properties with an associative array
     public function __construct(array $fields)
     {
-        // Define expected properties
-        $properties = ['id', 'mobileNumber', 'firstName', 'middleName', 'lastName', 'email', 'dob', 'hashedMobileNumber'];
-
-        // Check if all provided keys are valid properties
+        $properties = ['id', 'mobileNumber', 'firstname', 'middlename', 'lastname', 'email', 'dob', 'hashedMobileNumber'];
         foreach ($fields as $key => $value) {
             if (in_array($key, $properties, true)) {
                 $this->$key = $value;
@@ -57,36 +53,36 @@ class CustomerDataDTO
     }
 
     // Getter and Setter for firstName
-    public function getFirstName(): string
+    public function getFirstname(): string
     {
-        return $this->firstName;
+        return $this->firstname;
     }
 
-    public function setFirstName(string $firstName): void
+    public function setFirstname(string $firstname): void
     {
-        $this->firstName = $firstName;
+        $this->firstname = $firstname;
     }
 
     // Getter and Setter for middleName
-    public function getMiddleName(): string
+    public function getMiddlename(): string
     {
-        return $this->middleName;
+        return $this->middlename;
     }
 
-    public function setMiddleName(string $middleName): void
+    public function setMiddlename(string $middlename): void
     {
-        $this->middleName = $middleName;
+        $this->middlename = $middlename;
     }
 
     // Getter and Setter for lastName
-    public function getLastName(): string
+    public function getLastname(): string
     {
-        return $this->lastName;
+        return $this->lastname;
     }
 
-    public function setLastName(string $lastName): void
+    public function setLastname(string $lastname): void
     {
-        $this->lastName = $lastName;
+        $this->lastname = $lastname;
     }
 
     // Getter and Setter for email
