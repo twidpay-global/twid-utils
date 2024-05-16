@@ -124,7 +124,7 @@ class CustomerHelper
     {
         try {
             if (empty($fields)) {
-                $fields = ['id', 'mobileNumber'];
+                $fields = ['entity_id', 'orig_mobile'];
             }
 
             $result = DB::connection(PII_DATABASE_CONNECTION)
@@ -136,7 +136,15 @@ class CustomerHelper
             if ($result) {
                 $data = [];
                 foreach ($fields as $field) {
-                    $data[$field] = $result->{$field};
+                    if (isset($result->{$field})) {
+                        if ($field === 'entity_id') {
+                            $data['id'] = $result->{$field};
+                        } elseif ($field === 'orig_mobile') {
+                            $data['mobileNumber'] = $result->{$field};
+                        } else {
+                            $data[$field] = $result->{$field};
+                        }
+                    }
                 }
                 return new CustomerDataDTO($data);
             }
@@ -147,7 +155,6 @@ class CustomerHelper
             throw $ex;
         }
     }
-
     /**
      * getCustomersPIIDataByCustomerIDs method
      * This method will return the customer IDs from PII data by customer IDs
@@ -163,7 +170,7 @@ class CustomerHelper
     {
         try {
             if (empty($fields)) {
-                $fields = ['id', 'mobileNumber'];
+                $fields = ['entity_id', 'orig_mobile'];
             }
 
             $results = DB::connection(PII_DATABASE_CONNECTION)
@@ -177,7 +184,15 @@ class CustomerHelper
                 foreach ($results as $result) {
                     $data = [];
                     foreach ($fields as $field) {
-                        $data[$field] = $result->{$field};
+                        if (isset($result->{$field})) {
+                            if ($field === 'entity_id') {
+                                $data['id'] = $result->{$field};
+                            } elseif ($field === 'orig_mobile') {
+                                $data['mobileNumber'] = $result->{$field};
+                            } else {
+                                $data[$field] = $result->{$field};
+                            }
+                        }
                     }
                     $customerDataArray[] = new CustomerDataDTO($data);
                 }
@@ -204,19 +219,27 @@ class CustomerHelper
     {
         try {
             if (empty($fields)) {
-                $fields = ['id', 'mobileNumber'];
+                $fields = ['entity_id', 'orig_mobile'];
             }
 
             $result = DB::connection(PII_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->select($fields)
-                ->where('customer_id', $customer_id)
+                ->where('entity_id', $customer_id)
                 ->first();
 
             if ($result) {
                 $data = [];
                 foreach ($fields as $field) {
-                    $data[$field] = $result->{$field};
+                    if (isset($result->{$field})) {
+                        if ($field === 'entity_id') {
+                            $data['id'] = $result->{$field};
+                        } elseif ($field === 'orig_mobile') {
+                            $data['mobileNumber'] = $result->{$field};
+                        } else {
+                            $data[$field] = $result->{$field};
+                        }
+                    }
                 }
                 return new CustomerDataDTO($data);
             }
