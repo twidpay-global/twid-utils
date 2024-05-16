@@ -22,9 +22,9 @@ class CustomerPIIDataDTOTest extends TestCase
 
         $this->assertEquals($data['id'], $dto->getId());
         $this->assertEquals($data['mobileNumber'], $dto->getMobileNumber());
-        $this->assertEquals($data['firstName'], $dto->getFirstName());
-        $this->assertEquals($data['middleName'], $dto->getMiddleName());
-        $this->assertEquals($data['lastName'], $dto->getLastName());
+        $this->assertEquals($data['firstName'], $dto->getFirstname());
+        $this->assertEquals($data['middleName'], $dto->getMiddlename());
+        $this->assertEquals($data['lastName'], $dto->getLastname());
         $this->assertEquals($data['email'], $dto->getEmail());
         $this->assertEquals($data['dob'], $dto->getDob());
         $this->assertEquals($data['hashedMobileNumber'], $dto->getHashedMobileNumber());
@@ -42,18 +42,18 @@ class CustomerPIIDataDTOTest extends TestCase
 
         $dto->setId($newData['id']);
         $dto->setMobileNumber($newData['mobileNumber']);
-        $dto->setFirstName($newData['firstName']);
-        $dto->setMiddleName($newData['middleName']);
-        $dto->setLastName($newData['lastName']);
+        $dto->setFirstname($newData['firstName']);
+        $dto->setMiddlename($newData['middleName']);
+        $dto->setLastname($newData['lastName']);
         $dto->setEmail($newData['email']);
         $dto->setDob($newData['dob']);
         $dto->setHashedMobileNumber($newData['hashedMobileNumber']);
 
         $this->assertEquals($newData['id'], $dto->getId());
         $this->assertEquals($newData['mobileNumber'], $dto->getMobileNumber());
-        $this->assertEquals($newData['firstName'], $dto->getFirstName());
-        $this->assertEquals($newData['middleName'], $dto->getMiddleName());
-        $this->assertEquals($newData['lastName'], $dto->getLastName());
+        $this->assertEquals($newData['firstName'], $dto->getFirstname());
+        $this->assertEquals($newData['middleName'], $dto->getMiddlename());
+        $this->assertEquals($newData['lastName'], $dto->getLastname());
         $this->assertEquals($newData['email'], $dto->getEmail());
         $this->assertEquals($newData['dob'], $dto->getDob());
         $this->assertEquals($newData['hashedMobileNumber'], $dto->getHashedMobileNumber());
