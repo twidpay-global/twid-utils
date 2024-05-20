@@ -43,7 +43,7 @@ class CustomerHelper
      *
      * @return int
      */
-    public function getCustomerIDByMobile(string $mobile): int
+    public static function getCustomerIDByMobile(string $mobile): int
     {
         try {
             $result = DB::connection(PII_DATABASE_CONNECTION)
@@ -73,7 +73,7 @@ class CustomerHelper
      * @return array
      */
 
-    public function getCustomersDataByMobiles(array $mobiles, string ...$fields): array
+    public static function getCustomersDataByMobiles(array $mobiles, string ...$fields): array
     {
         try {
             if (empty($fields)) {
@@ -120,7 +120,7 @@ class CustomerHelper
      * @param string $mobile The mobile number to search
      * @param string ...$fields The fields to be fetched
      */
-    public function getCustomerDataByMobile(string $mobile, string ...$fields): CustomerDataDTO
+    public static function getCustomerDataByMobile(string $mobile, string ...$fields): CustomerDataDTO
     {
         try {
             if (empty($fields)) {
@@ -166,7 +166,7 @@ class CustomerHelper
      * @return array
      */
 
-    public function getCustomerDataByCustomerIDs(array $customer_ids, string ...$fields): array
+    public static function getCustomerDataByCustomerIDs(array $customer_ids, string ...$fields): array
     {
         try {
             if (empty($fields)) {
@@ -215,7 +215,7 @@ class CustomerHelper
      *
      * @return array
      */
-    public function getCustomerPIIDataByCustomerID(int $customer_id, string ...$fields): CustomerDataDTO
+    public static function getCustomerPIIDataByCustomerID(int $customer_id, string ...$fields): CustomerDataDTO
     {
         try {
             if (empty($fields)) {
