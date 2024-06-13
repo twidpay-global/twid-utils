@@ -41,7 +41,7 @@ class CustomerHelper
      *
      * @param string $mobile The mobile number to search
      *
-     * @return int
+     * @return int Customer ID
      */
     public static function getCustomerIDByMobile(string $mobile): int
     {
@@ -56,9 +56,9 @@ class CustomerHelper
             }
 
             throw new Exception('No customer found with the provided mobile number');
-        } catch (\Exception $ex) {
-            TLog::error($ex->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile]);
-            throw $ex;
+        } catch (\Exception $exception) {
+            TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile]);
+            throw $exception;
         }
     }
 
@@ -70,13 +70,13 @@ class CustomerHelper
      * @param array $mobiles The mobile numbers to search
      * @param string ...$fields The fields to be fetched
      *
-     * @return array
+     * @return array Bulk of CustomerDataDTO
      */
 
     public static function getCustomersDataByMobiles(array $mobiles, string ...$fields): array
     {
         try {
-            if (empty($fields)) {
+            if ($fields === []) {
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
@@ -101,15 +101,17 @@ class CustomerHelper
                             }
                         }
                     }
+
                     $customerDataArray[] = new CustomerDataDTO($data);
                 }
+
                 return $customerDataArray;
             }
 
             throw new Exception('No customers found with the provided mobile numbers');
-        } catch (\Exception $ex) {
-            TLog::error($ex->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobiles' => $mobiles]);
-            throw $ex;
+        } catch (\Exception $exception) {
+            TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobiles' => $mobiles]);
+            throw $exception;
         }
     }
 
@@ -119,11 +121,13 @@ class CustomerHelper
      *
      * @param string $mobile The mobile number to search
      * @param string ...$fields The fields to be fetched
+     * 
+     * @return object CustomerDataDTO
      */
     public static function getCustomerDataByMobile(string $mobile, string ...$fields): CustomerDataDTO
     {
         try {
-            if (empty($fields)) {
+            if ($fields === []) {
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
@@ -146,15 +150,17 @@ class CustomerHelper
                         }
                     }
                 }
+
                 return new CustomerDataDTO($data);
             }
 
             throw new Exception('No customer found with the provided mobile number');
-        } catch (\Exception $ex) {
-            TLog::error($ex->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile]);
-            throw $ex;
+        } catch (\Exception $exception) {
+            TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile]);
+            throw $exception;
         }
     }
+
     /**
      * getCustomersPIIDataByCustomerIDs method
      * This method will return the customer IDs from PII data by customer IDs
@@ -163,13 +169,13 @@ class CustomerHelper
      * @param array $customer_ids The customer IDs to search
      * @param string ...$fields The fields to be fetched
      *
-     * @return array
+     * @return array Bulk of CustomerDataDTO
      */
 
     public static function getCustomerDataByCustomerIDs(array $customer_ids, string ...$fields): array
     {
         try {
-            if (empty($fields)) {
+            if ($fields === []) {
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
@@ -194,14 +200,16 @@ class CustomerHelper
                             }
                         }
                     }
+
                     $customerDataArray[] = new CustomerDataDTO($data);
                 }
+
                 return $customerDataArray;
             }
 
             throw new Exception('No customers found with the provided customer IDs');
-        } catch (\Exception $ex) {
-            TLog::error($ex->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer IDs' => $customer_ids]);
+        } catch (\Exception $exception) {
+            TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer IDs' => $customer_ids]);
             return [];
         }
     }
@@ -213,12 +221,12 @@ class CustomerHelper
      * @param int $customer_id The customer ID to search
      * @param string ...$fields The fields to be fetched
      *
-     * @return array
+     * @return object CustomerDataDTO
      */
     public static function getCustomerPIIDataByCustomerID(int $customer_id, string ...$fields): CustomerDataDTO
     {
         try {
-            if (empty($fields)) {
+            if ($fields === []) {
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
@@ -241,13 +249,96 @@ class CustomerHelper
                         }
                     }
                 }
+
                 return new CustomerDataDTO($data);
             }
 
             throw new Exception('No customer found with the provided customer ID');
-        } catch (\Exception $ex) {
-            TLog::error($ex->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer ID' => $customer_id]);
-            throw $ex;
+        } catch (\Exception $exception) {
+            TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer ID' => $customer_id]);
+            throw $exception;
         }
     }
+
+    /**
+     * getCustomerDataByFilters method
+     * This method will return the customer's PII data by provided filters
+     *
+     * @param array $filters The field name and value to search from
+     * @param string ...$fields The fields to be fetched
+     * 
+     * @return object CustomerDataDTO
+     */
+    public static function getCustomerDataByFilters(array $filters, string ...$fields): CustomerDataDTO
+    {
+        try {
+            if ($fields === []) {
+                $fields = ['entity_id', 'orig_mobile'];
+            }
+
+            $query = DB::connection(PII_DATABASE_CONNECTION)
+                ->table('customer_entity')
+                ->select($fields);
+
+            foreach ($filters as $field => $value) {
+               $query =  $query->where($field, $value);
+            }
+
+            $result =  $query->first();
+
+            if ($result) {
+                $data = [];
+                foreach ($fields as $field) {
+                    if (isset($result->{$field})) {
+                        if ($field === 'entity_id') {
+                            $data['id'] = $result->{$field};
+                        } elseif ($field === 'orig_mobile') {
+                            $data['mobileNumber'] = $result->{$field};
+                        } else {
+                            $data[$field] = $result->{$field};
+                        }
+                    }
+                }
+
+                return new CustomerDataDTO($data);
+            }
+
+            throw new Exception('No customer found with the provided filters');
+        } catch (\Exception $exception) {
+            TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Filters' => json_encode($filters)]);
+            throw $exception;
+        }
+    }
+
+    /**
+     * updatePiiData method
+     * This method will update the customer's PII data by customer ID
+     *
+     * @param int $customer_id The customer ID to update
+     * @param array $data The data to be updated
+     *
+     * @return bool status of the update
+     */
+    public static function updatePiiData(int $customer_id, array $data): bool
+    {
+        try {
+            $query = DB::connection(PII_DATABASE_CONNECTION)
+                ->table('customer_entity')
+                ->where('entity_id', $customer_id)
+                ->update($data);
+
+            if (!empty($data['orig_mobile'])) {
+                $query = DB::connection(PII_DATABASE_CONNECTION)
+                    ->table('c_customer_additional')
+                    ->where('customer_id', $customer_id)
+                    ->update(['mobile' => $data['orig_mobile']]);
+            }
+
+            return $query;
+        } catch (\Exception $exception) {
+            TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Data' => json_encode($data), 'Customer ID' => $customer_id]);
+            throw $exception;
+        }
+    }
+
 }
