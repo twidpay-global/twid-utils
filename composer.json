@@ -2,12 +2,16 @@
     "name": "twidpay/utils",
     "type": "library",
     "description": "Utils for twidpay",
-    "version": "1.0.13",
+    "version": "1.0.14",
     "license": "MIT",
     "authors": [
         {
             "name": "chetan-twid",
             "email": "chetan.kaushik@twidpay.com"
+        },
+        {
+            "name": "sukrati-twid",
+            "email": "sukrati.agrawal@twidpay.com"
         }
     ],
     "autoload": {
