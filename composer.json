@@ -2,29 +2,17 @@
     "name": "twidpay/utils",
     "type": "library",
     "description": "Utils for twidpay",
-    "version": "1.0.14",
+    "version": "2.0.1",
     "license": "MIT",
     "authors": [
         {
             "name": "chetan-twid",
             "email": "chetan.kaushik@twidpay.com"
-        },
-        {
-            "name": "sukrati-twid",
-            "email": "sukrati.agrawal@twidpay.com"
         }
     ],
     "autoload": {
         "psr-4": {
             "Utils\\": "src/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Utils\\PiiData\\PiiServiceProvider"
-            ]
-
         }
     },
 
@@ -34,7 +22,7 @@
     },
     "require": {
         "ramsey/uuid": "^4.2.2",
-        "twidpay/twid-logger": "^1.0",
-        "laravel/lumen-framework": "^8.0"
+        "twidpay/twid-logger": "^2.0",
+        "laravel/lumen-framework": "^11.0"
     }
 }
