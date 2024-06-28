@@ -1,5 +1,4 @@
 <?php
-
 /**
  * PIIDataHelper class
  * It will create a layer between the PII data and the application
