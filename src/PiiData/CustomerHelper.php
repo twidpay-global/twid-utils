@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PIIDataHelper class
  * It will create a layer between the PII data and the application
@@ -55,7 +56,7 @@ class CustomerHelper
                 return $result->entity_id;
             }
 
-            throw new Exception('No customer found with the provided mobile number');
+            TLog::error("No customer found with the provided mobile number", ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile]);
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile]);
             throw $exception;
@@ -108,7 +109,7 @@ class CustomerHelper
                 return $customerDataArray;
             }
 
-            throw new Exception('No customers found with the provided mobile numbers');
+            TLog::error("No customers found with the provided mobile numbers", ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobiles' => $mobiles]);
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobiles' => $mobiles]);
             throw $exception;
@@ -154,7 +155,7 @@ class CustomerHelper
                 return new CustomerDataDTO($data);
             }
 
-            throw new Exception('No customer found with the provided mobile number');
+            TLog::error("No customer found with the provided mobile number", ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile]);
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile]);
             throw $exception;
@@ -207,7 +208,7 @@ class CustomerHelper
                 return $customerDataArray;
             }
 
-            throw new Exception('No customers found with the provided customer IDs');
+            TLog::error("No customers found with the provided customer IDs", ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer IDs' => $customer_ids]);
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer IDs' => $customer_ids]);
             return [];
@@ -253,7 +254,7 @@ class CustomerHelper
                 return new CustomerDataDTO($data);
             }
 
-            throw new Exception('No customer found with the provided customer ID');
+            TLog::error("No customer found with the provided customer ID", ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer ID' => $customer_id]);
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer ID' => $customer_id]);
             throw $exception;
@@ -281,7 +282,7 @@ class CustomerHelper
                 ->select($fields);
 
             foreach ($filters as $field => $value) {
-               $query =  $query->where($field, $value);
+                $query =  $query->where($field, $value);
             }
 
             $result =  $query->first();
@@ -303,7 +304,7 @@ class CustomerHelper
                 return new CustomerDataDTO($data);
             }
 
-            throw new Exception('No customer found with the provided filters');
+            TLog::error("No customer found with the provided filters", ['Method' => __METHOD__, 'Line' => __LINE__, 'Filters' => json_encode($filters)]);
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Filters' => json_encode($filters)]);
             throw $exception;
@@ -322,23 +323,19 @@ class CustomerHelper
     public static function updatePiiData(int $customer_id, array $data): bool
     {
         try {
-            $query = DB::connection(PII_DATABASE_CONNECTION)
-                ->table('customer_entity')
-                ->where('entity_id', $customer_id)
-                ->update($data);
-
             if (!empty($data['orig_mobile'])) {
-                $query = DB::connection(PII_DATABASE_CONNECTION)
+                return DB::connection(PII_DATABASE_CONNECTION)
                     ->table('c_customer_additional')
                     ->where('customer_id', $customer_id)
                     ->update(['mobile' => $data['orig_mobile']]);
             }
-
-            return $query;
+            return DB::connection(PII_DATABASE_CONNECTION)
+                ->table('customer_entity')
+                ->where('entity_id', $customer_id)
+                ->update($data);
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Data' => json_encode($data), 'Customer ID' => $customer_id]);
             throw $exception;
         }
     }
-
 }
