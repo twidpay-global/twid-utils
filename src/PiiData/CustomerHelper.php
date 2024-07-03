@@ -32,7 +32,8 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use twid\logger\Facades\TLog;
 
-const PII_DATABASE_CONNECTION = 'mysql_read1';
+const PII_READ_ONLY_DATABASE_CONNECTION = 'mysql_read1';
+const PII_DATABASE_CONNECTION = 'mysql';
 
 class CustomerHelper
 {
@@ -47,7 +48,7 @@ class CustomerHelper
     public static function getCustomerIDByMobile(string $mobile): int
     {
         try {
-            $result = DB::connection(PII_DATABASE_CONNECTION)
+            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->where('orig_mobile', $mobile)
                 ->first();
@@ -81,7 +82,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $results = DB::connection(PII_DATABASE_CONNECTION)
+            $results = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->whereIn('orig_mobile', $mobiles)
                 ->get();
@@ -132,7 +133,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $result = DB::connection(PII_DATABASE_CONNECTION)
+            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->select($fields)
                 ->where('orig_mobile', $mobile)
@@ -180,7 +181,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $results = DB::connection(PII_DATABASE_CONNECTION)
+            $results = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->whereIn('entity_id', $customer_ids)
                 ->get();
@@ -231,7 +232,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $result = DB::connection(PII_DATABASE_CONNECTION)
+            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->select($fields)
                 ->where('entity_id', $customer_id)
@@ -277,7 +278,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $query = DB::connection(PII_DATABASE_CONNECTION)
+            $query = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->select($fields);
 
@@ -329,6 +330,7 @@ class CustomerHelper
                     ->where('customer_id', $customer_id)
                     ->update(['mobile' => $data['orig_mobile']]);
             }
+
             return DB::connection(PII_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->where('entity_id', $customer_id)
