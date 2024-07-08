@@ -48,6 +48,11 @@ class CustomerHelper
     public static function getCustomerIDByMobile(string $mobile): int
     {
         try {
+            if (empty($mobile)) {
+                TLog::error("Mobile number is empty", ['Method' => __METHOD__, 'Line' => __LINE__]);
+                return 0;
+            }
+
             $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->where('orig_mobile', $mobile)
@@ -58,6 +63,7 @@ class CustomerHelper
             }
 
             TLog::error("No customer found with the provided mobile number", ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile]);
+            return 0;
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile]);
             throw $exception;
@@ -78,6 +84,10 @@ class CustomerHelper
     public static function getCustomersDataByMobiles(array $mobiles, string ...$fields): array
     {
         try {
+            if (empty($mobiles)) {
+                TLog::error("Mobile numbers are empty", ['Method' => __METHOD__, 'Line' => __LINE__]);
+                return [];
+            }
             if ($fields === []) {
                 $fields = ['entity_id', 'orig_mobile'];
             }
@@ -111,6 +121,7 @@ class CustomerHelper
             }
 
             TLog::error("No customers found with the provided mobile numbers", ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobiles' => $mobiles]);
+            return $customerDataArray;
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobiles' => $mobiles]);
             throw $exception;
@@ -129,6 +140,10 @@ class CustomerHelper
     public static function getCustomerDataByMobile(string $mobile, string ...$fields): CustomerDataDTO
     {
         try {
+            if (empty($mobile)) {
+                TLog::error("Mobile number is empty", ['Method' => __METHOD__, 'Line' => __LINE__]);
+                return new CustomerDataDTO([]);
+            }
             if ($fields === []) {
                 $fields = ['entity_id', 'orig_mobile'];
             }
@@ -157,6 +172,7 @@ class CustomerHelper
             }
 
             TLog::error("No customer found with the provided mobile number", ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile]);
+            return new CustomerDataDTO([]);
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile]);
             throw $exception;
@@ -177,6 +193,10 @@ class CustomerHelper
     public static function getCustomerDataByCustomerIDs(array $customer_ids, string ...$fields): array
     {
         try {
+            if (empty($customer_ids)) {
+                TLog::error("Customer IDs are empty", ['Method' => __METHOD__, 'Line' => __LINE__]);
+                return [];
+            }
             if ($fields === []) {
                 $fields = ['entity_id', 'orig_mobile'];
             }
@@ -210,6 +230,7 @@ class CustomerHelper
             }
 
             TLog::error("No customers found with the provided customer IDs", ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer IDs' => $customer_ids]);
+            return $customerDataArray;
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer IDs' => $customer_ids]);
             return [];
@@ -228,6 +249,10 @@ class CustomerHelper
     public static function getCustomerPIIDataByCustomerID(int $customer_id, string ...$fields): CustomerDataDTO
     {
         try {
+            if (empty($customer_id)) {
+                TLog::error("Customer ID is empty", ['Method' => __METHOD__, 'Line' => __LINE__]);
+                return new CustomerDataDTO([]);
+            }
             if ($fields === []) {
                 $fields = ['entity_id', 'orig_mobile'];
             }
@@ -256,6 +281,7 @@ class CustomerHelper
             }
 
             TLog::error("No customer found with the provided customer ID", ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer ID' => $customer_id]);
+            return new CustomerDataDTO([]);
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer ID' => $customer_id]);
             throw $exception;
@@ -274,6 +300,10 @@ class CustomerHelper
     public static function getCustomerDataByFilters(array $filters, string ...$fields): CustomerDataDTO
     {
         try {
+            if (empty($filters)) {
+                TLog::error("Filters are empty", ['Method' => __METHOD__, 'Line' => __LINE__]);
+                return new CustomerDataDTO([]);
+            }
             if ($fields === []) {
                 $fields = ['entity_id', 'orig_mobile'];
             }
@@ -306,6 +336,7 @@ class CustomerHelper
             }
 
             TLog::error("No customer found with the provided filters", ['Method' => __METHOD__, 'Line' => __LINE__, 'Filters' => json_encode($filters)]);
+            return new CustomerDataDTO([]);
         } catch (\Exception $exception) {
             TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Filters' => json_encode($filters)]);
             throw $exception;
@@ -324,8 +355,12 @@ class CustomerHelper
     public static function updatePiiData(int $customer_id, array $data): bool
     {
         try {
+            if (empty($customer_id)) {
+                TLog::error("Customer ID is empty", ['Method' => __METHOD__, 'Line' => __LINE__]);
+                return false;
+            }
             if (!empty($data['orig_mobile'])) {
-                return DB::connection(PII_DATABASE_CONNECTION)
+                DB::connection(PII_DATABASE_CONNECTION)
                     ->table('c_customer_additional')
                     ->where('customer_id', $customer_id)
                     ->update(['mobile' => $data['orig_mobile']]);
