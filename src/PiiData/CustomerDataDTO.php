@@ -117,4 +117,8 @@ class CustomerDataDTO
     {
         $this->hashedMobileNumber = $hashedMobileNumber;
     }
+
+    public function isEmpty(): bool {
+        return empty($this->id);
+    }
 }
