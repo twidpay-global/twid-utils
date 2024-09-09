@@ -374,4 +374,39 @@ class CustomerHelper
             throw $exception;
         }
     }
+
+    /**
+     * getCustomerAdditionalData method
+     * This method will return the customer's additional data by mobile number or customer ID
+     *
+     * @param string|null $mobile_number The mobile number to search
+     * @param int|null $customer_id The customer ID to search
+     *
+     * @return object|null Customer additional data
+     */
+    public static function getCustomerAdditionalData(?string $mobile_number, ?int $customer_id): ?object
+    {
+        try {
+            if (empty($mobile_number) && empty($customer_id)) {
+                TLog::error("Both mobile number and customer ID are empty", ['Method' => __METHOD__, 'Line' => __LINE__]);
+                return null;
+            }
+
+            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
+                ->table('c_customer_additional')
+                ->join('customer_entity', 'customer_entity.entity_id', '=', 'c_customer_additional.customer_id')
+                ->when($mobile_number, function ($q) use ($mobile_number) {
+                    return $q->where('c_customer_additional.mobile', $mobile_number);
+                })
+                ->when($customer_id, function ($q) use ($customer_id) {
+                    return $q->where('c_customer_additional.customer_id', $customer_id);
+                })
+                ->first();
+
+            return $result;
+        } catch (\Exception $exception) {
+            TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Mobile' => $mobile_number, 'Customer ID' => $customer_id]);
+            throw $exception;
+        }
+    }
 }
