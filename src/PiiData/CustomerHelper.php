@@ -409,4 +409,34 @@ class CustomerHelper
             throw $exception;
         }
     }
+
+    /**
+     * getCustomerDetailsByCustomerId method
+     * This method will return the customer's details by customer ID
+     *
+     * @param int $customer_id The customer ID to search
+     *
+     * @return object|null Customer details
+     */
+    public static function getCustomerAdditionalDataByCustomerId(int $customer_id): ?object
+    {
+        try {
+            if (empty($customer_id)) {
+                TLog::error("Customer ID is empty", ['Method' => __METHOD__, 'Line' => __LINE__]);
+                return null;
+            }
+
+            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
+                ->table('c_customer_additional')
+                ->join('customer_entity', 'customer_entity.entity_id', '=', 'c_customer_additional.customer_id')
+                ->select('customer_entity.firstname', 'customer_entity.lastname', 'c_customer_additional.mobile', 'c_customer_additional.customer_id', 'c_customer_additional.customer_referral_code')
+                ->where('c_customer_additional.customer_id', $customer_id)
+                ->first();
+
+            return $result;
+        } catch (\Exception $exception) {
+            TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'Customer ID' => $customer_id]);
+            throw $exception;
+        }
+    }
 }
