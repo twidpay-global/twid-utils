@@ -2,7 +2,7 @@
     "name": "twidpay/utils",
     "type": "library",
     "description": "Utils for twidpay",
-    "version": "2.0.6",
+    "version": "2.0.7",
     "license": "MIT",
     "authors": [
         {
@@ -22,7 +22,6 @@
     },
     "require": {
         "ramsey/uuid": "^4.2.2",
-        "twidpay/twid-logger": "^2.0",
-        "laravel/lumen-framework": "^11.0"
+        "twidpay/twid-logger": "^2.0"
     }
 }
