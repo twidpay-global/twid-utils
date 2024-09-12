@@ -22,7 +22,6 @@
     },
     "require": {
         "ramsey/uuid": "^4.2.2",
-        "twidpay/twid-logger": "^2.0",
-        "laravel/lumen-framework": "^11.0"
+        "twidpay/twid-logger": "^2.0"
     }
 }

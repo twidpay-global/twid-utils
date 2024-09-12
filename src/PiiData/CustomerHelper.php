@@ -1,4 +1,5 @@
 <?php
+
 /**
  * PIIDataHelper class
  * It will create a layer between the PII data and the application
@@ -28,7 +29,6 @@
 namespace Utils\PiiData;
 
 use Exception;
-use Illuminate\Support\Facades\DB;
 use twid\logger\Facades\TLog;
 
 const PII_READ_ONLY_DATABASE_CONNECTION = 'mysql_read1';
@@ -52,7 +52,7 @@ class CustomerHelper
                 return 0;
             }
 
-            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $result = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->where('orig_mobile', $mobile)
                 ->first();
@@ -91,7 +91,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $results = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $results = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->whereIn('orig_mobile', $mobiles)
                 ->get();
@@ -133,7 +133,7 @@ class CustomerHelper
      *
      * @param string $mobile The mobile number to search
      * @param string ...$fields The fields to be fetched
-     * 
+     *
      * @return object CustomerDataDTO
      */
     public static function getCustomerDataByMobile(string $mobile, string ...$fields): CustomerDataDTO
@@ -147,7 +147,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $result = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->select($fields)
                 ->where('orig_mobile', $mobile)
@@ -200,7 +200,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $results = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $results = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->whereIn('entity_id', $customer_ids)
                 ->get();
@@ -256,7 +256,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $result = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->select($fields)
                 ->where('entity_id', $customer_id)
@@ -293,7 +293,7 @@ class CustomerHelper
      *
      * @param array $filters The field name and value to search from
      * @param string ...$fields The fields to be fetched
-     * 
+     *
      * @return object CustomerDataDTO
      */
     public static function getCustomerDataByFilters(array $filters, string ...$fields): CustomerDataDTO
@@ -307,7 +307,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $query = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $query = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->select($fields);
 
@@ -392,7 +392,7 @@ class CustomerHelper
                 return null;
             }
 
-            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $result = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('c_customer_additional')
                 ->join('customer_entity', 'customer_entity.entity_id', '=', 'c_customer_additional.customer_id')
                 ->when($mobile_number, function ($q) use ($mobile_number) {
@@ -426,7 +426,7 @@ class CustomerHelper
                 return null;
             }
 
-            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $result = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('c_customer_additional')
                 ->join('customer_entity', 'customer_entity.entity_id', '=', 'c_customer_additional.customer_id')
                 ->select('customer_entity.firstname', 'customer_entity.lastname', 'c_customer_additional.mobile', 'c_customer_additional.customer_id', 'c_customer_additional.customer_referral_code')
