@@ -55,7 +55,7 @@ class CustomerDataDTO
     // Getter and Setter for firstName
     public function getFirstname(): string
     {
-        return $this->firstname;
+        return $this->firstname?? '';
     }
 
     public function setFirstname(string $firstname): void
@@ -66,7 +66,7 @@ class CustomerDataDTO
     // Getter and Setter for middleName
     public function getMiddlename(): string
     {
-        return $this->middlename;
+        return $this->middlename?? '';
     }
 
     public function setMiddlename(string $middlename): void
@@ -77,7 +77,7 @@ class CustomerDataDTO
     // Getter and Setter for lastName
     public function getLastname(): string
     {
-        return $this->lastname;
+        return $this->lastname?? '';
     }
 
     public function setLastname(string $lastname): void
@@ -88,7 +88,7 @@ class CustomerDataDTO
     // Getter and Setter for email
     public function getEmail(): string
     {
-        return $this->email;
+        return $this->email?? '';
     }
 
     public function setEmail(string $email): void
@@ -99,7 +99,7 @@ class CustomerDataDTO
     // Getter and Setter for dob
     public function getDob(): string
     {
-        return $this->dob;
+        return $this->dob?? '';
     }
 
     public function setDob(string $dob): void
