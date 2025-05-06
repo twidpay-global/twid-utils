@@ -44,7 +44,7 @@ class CustomerDataDTO
     // Getter and Setter for mobileNumber
     public function getMobileNumber(): string
     {
-        return $this->mobileNumber?? '';
+        return $this->mobileNumber;
     }
 
     public function setMobileNumber(string $mobileNumber): void
