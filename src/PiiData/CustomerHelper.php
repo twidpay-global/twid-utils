@@ -439,4 +439,59 @@ class CustomerHelper
             throw $exception;
         }
     }
+       /**
+     * chunkCustomersByCreatedAt method
+     * This method processes customers in chunks based on their creation date
+     *
+     * @param string $startDate The start date in Y-m-d format
+     * @param int $chunkSize The size of each chunk
+     * @param callable $callback The function to call for each chunk
+     * @param string ...$fields The fields to be fetched
+     *
+     * @return bool True if processing completed successfully
+     * @throws \Exception If parameters are invalid
+     */
+    public static function chunkCustomersByCreatedAt($startDate, $chunkSize, $callback, ...$fields) {
+        try {
+            // Validate parameters
+            if (empty($startDate) || !strtotime($startDate)) {
+                throw new \Exception("Invalid start date format. Expected Y-m-d format.");
+            }
+            
+            if (!is_int($chunkSize) || $chunkSize <= 0) {
+                throw new \Exception("Chunk size must be a positive integer.");
+            }
+            
+            if (!is_callable($callback)) {
+                throw new \Exception("Callback must be a valid callable function.");
+            }
+            
+            // Use default fields if none provided
+            $selectedFields = count($fields) > 0 ? $fields : ['entity_id', 'orig_mobile'];
+            
+            // Build and execute query using app('db') instead of DB facade
+            $query = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
+                ->table('customer_entity')
+                ->select($selectedFields)
+                ->where('created_at', '>', $startDate)
+                ->orderBy('created_at');
+                
+            $totalChunks = 0;
+            $totalRecords = 0;
+            
+            $query->chunk($chunkSize, function($customers) use ($callback, &$totalChunks, &$totalRecords) {
+                $totalChunks++;
+                $totalRecords += count($customers);
+                
+                // Execute the callback with the current chunk
+                $callback($customers);
+            });
+            
+            return true;
+        } catch (\Exception $exception) {
+            TLog::error($exception->getMessage(), ['Method' => __METHOD__, 'Line' => __LINE__, 'StartDate' => $startDate]);
+            throw $exception;
+        }
+    }
+
 }
