@@ -1,10 +1,19 @@
-# Twid Utils
-This PHP library provides a convenient way to produce messages to Kafka topics using the RdKafka PHP extension.
+# Twid Utils v3.0.0
+This PHP library provides utility classes for Twid applications. It's compatible with PHP 8.2+ and Laravel 12.
+
+## Breaking Changes in v3.0.0
+- Removed Kafka-related functionality
+- Updated to support Laravel 12
+- Upgraded to twidpay/twid-logger 3.0
+- Requires PHP 8.2 or higher
+- Improved type safety with PHP 8.4 support
 
 ## Installation
 
 1. **Requirements**:
-    - RdKafka PHP extension ([Installation Instructions](https://arnaud.le-blanc.net/php-rdkafka-doc/phpdoc/rdkafka.installation.html))
+    - PHP 8.2 or higher
+    - Laravel 12
+    - twidpay/twid-logger 3.0
 
 2. **Installation via Composer**:
 
@@ -13,21 +22,23 @@ This PHP library provides a convenient way to produce messages to Kafka topics u
    ```bash
    composer require twidpay/utils
    ```
+
 3. **Usage**:
-   - All possible configurations for the KafkaProducer can be found [here](https://github.com/confluentinc/librdkafka/blob/master/CONFIGURATION.md)    
+   - The library includes utilities for handling PII data:
 
     ```php
-   use Utils\queue\KafkaProducer;
+   use Utils\PiiData\CustomerDataDTO;
  
-    $config = [
-        'metadata.broker.list' => 'localhost:9092',
-        'compression.codec' => 'snappy',
-        'security.protocol' => 'ssl',
-        //other kafka configuration
+    $data = [
+        'id' => 1,
+        'mobileNumber' => '1234567890',
+        'firstname' => 'John',
+        'middlename' => 'Doe',
+        'lastname' => 'Smith',
+        'email' => 'john.doe@example.com',
+        'dob' => '1990-01-01',
+        'hashedMobileNumber' => 'hash123'
     ];
    
-    $this->kafkaProducer = new KafkaProducer($config);
-
-   //key is optional
-    $this->kafkaProducer->produce($topic, $message, $key);
+    $customer = new CustomerDataDTO($data);
    ```

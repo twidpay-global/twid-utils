@@ -29,6 +29,7 @@
 namespace Utils\PiiData;
 
 use Exception;
+use Illuminate\Support\Facades\DB;
 use twid\logger\Facades\TLog;
 
 const PII_READ_ONLY_DATABASE_CONNECTION = 'mysql_read1';
@@ -52,7 +53,7 @@ class CustomerHelper
                 return 0;
             }
 
-            $result = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->where('orig_mobile', $mobile)
                 ->first();
@@ -91,7 +92,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $results = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $results = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->whereIn('orig_mobile', $mobiles)
                 ->get();
@@ -147,7 +148,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $result = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->select($fields)
                 ->where('orig_mobile', $mobile)
@@ -200,7 +201,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $results = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $results = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->whereIn('entity_id', $customer_ids)
                 ->get();
@@ -256,7 +257,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $result = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->select($fields)
                 ->where('entity_id', $customer_id)
@@ -307,7 +308,7 @@ class CustomerHelper
                 $fields = ['entity_id', 'orig_mobile'];
             }
 
-            $query = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $query = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->select($fields);
 
@@ -392,7 +393,7 @@ class CustomerHelper
                 return null;
             }
 
-            $result = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('c_customer_additional')
                 ->join('customer_entity', 'customer_entity.entity_id', '=', 'c_customer_additional.customer_id')
                 ->when($mobile_number, function ($q) use ($mobile_number) {
@@ -426,7 +427,7 @@ class CustomerHelper
                 return null;
             }
 
-            $result = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            $result = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('c_customer_additional')
                 ->join('customer_entity', 'customer_entity.entity_id', '=', 'c_customer_additional.customer_id')
                 ->select('customer_entity.firstname', 'customer_entity.lastname', 'c_customer_additional.mobile', 'c_customer_additional.customer_id', 'c_customer_additional.customer_referral_code')
@@ -469,8 +470,8 @@ class CustomerHelper
             // Use default fields if none provided
             $selectedFields = count($fields) > 0 ? $fields : ['entity_id', 'orig_mobile'];
             
-            // Build and execute query using app('db') instead of DB facade
-            $query = app('db')->connection(PII_READ_ONLY_DATABASE_CONNECTION)
+            // Build and execute query using the DB facade
+            $query = DB::connection(PII_READ_ONLY_DATABASE_CONNECTION)
                 ->table('customer_entity')
                 ->select($selectedFields)
                 ->where('created_at', '>', $startDate)
